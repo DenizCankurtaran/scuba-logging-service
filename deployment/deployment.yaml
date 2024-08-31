@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scuba-logging-service
+spec:
+  selector:
+    matchLabels:
+      app: scuba-logging-service
+  template:
+    metadata:
+      labels:
+        app: scuba-logging-service
+    spec:
+      containers:
+        - name: scuba-logging-service
+          image: scuba:1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ENV_HELLO
+              valueFrom:
+                secretKeyRef:
+                  name: env-secret
+                  key: foo
+          volumeMounts:
+          - name: config-volume
+            mountPath: /app/src/main/kotlin/com/example/scuba/resources
+          - name: secret-volume
+            mountPath: /etc/secrets/hello-secret
+      volumes:
+        - name: config-volume
+          configMap:
+            name: application-config
+        - name: secret-volume
+          secret:
+            secretName: hello-secret
