@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: scuba-logging-service
+  cloud:
+    kubernetes:
+      config:
+        enabled: true
+        reload:
+          enabled: true
+        name: scuba-logging-service # rename configMap to scuba-logging-service-config, might require sources
+      secrets:
+        paths:
+        - /etc/secrets/hello-secret
+
+
+test:
+  hello: local

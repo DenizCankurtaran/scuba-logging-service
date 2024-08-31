@@ -11,9 +11,10 @@ spec:
       labels:
         app: scuba-logging-service
     spec:
+      serviceAccountName: scuba-logging-service-account
       containers:
         - name: scuba-logging-service
-          image: scuba:1
+          image: denizcankurtaran006/scuba-logging-service:1.0.3
           ports:
             - containerPort: 8080
           env:
@@ -22,15 +23,3 @@ spec:
                 secretKeyRef:
                   name: env-secret
                   key: foo
-          volumeMounts:
-          - name: config-volume
-            mountPath: /app/src/main/kotlin/com/example/scuba/resources
-          - name: secret-volume
-            mountPath: /etc/secrets/hello-secret
-      volumes:
-        - name: config-volume
-          configMap:
-            name: application-config
-        - name: secret-volume
-          secret:
-            secretName: hello-secret

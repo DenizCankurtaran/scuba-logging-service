@@ -1,18 +1,8 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: scuba-logging-application
+  name: scuba-logging-service # also rename to scuba-logging-service-config
 data:
   application.yaml: |
-    spring:
-      application:
-        name: scuba-logging-service
-      cloud:
-        kubernetes:
-          config:
-            name: scuba-logging-service
-            sources:
-            - name: scuba-logging-application-config
-
     test:
       hello: 'from config'
