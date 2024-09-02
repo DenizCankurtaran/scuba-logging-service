@@ -11,6 +11,17 @@ spring:
       secrets:
         paths:
         - /etc/secrets/hello-secret
+  datasource:
+    # driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://127.0.0.1:5432/fish
+    username: postgres
+    password: admin
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    ddl-auto: update
+
 
 
 test:
