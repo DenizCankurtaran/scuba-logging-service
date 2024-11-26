@@ -1,5 +1,5 @@
 services:
-  mysql:
+  postgres:
     image: postgres:latest
     restart: always
     ports:
