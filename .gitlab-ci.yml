@@ -19,7 +19,7 @@ build application:
   stage: "build"
   image: gradle:8.10.0-jdk21
   script:
-    - gradlew clean build
+    - ./gradlew clean build
   artifacts:
     paths:
       - ./build
@@ -28,7 +28,7 @@ test application:
   stage: "test"
   image: gradle:8.10.0-jdk21
   script:
-    - gradlew test
+    - ./gradlew test
 
 # publish application:
 #   stage: "publish"
