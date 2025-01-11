@@ -1,0 +1,48 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: >-
+        $CI_PIPELINE_SOURCE == "push"
+        && ($CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "release")
+    - if: '$CI_COMMIT_TAG'
+      when: always
+    - when: never
+
+variables:
+  version: 0.0.$CI_PIPELINE_IID
+
+stages:
+  - build
+  - test
+  - publish
+
+build application:
+  stage: "build"
+  image: gradle:8.10.0-jdk21
+  script:
+    - ./gradlew clean build
+  artifacts:
+    paths:
+      - ./build
+
+test application:
+  stage: "test"
+  image: gradle:8.10.0-jdk21
+  script:
+    - ./gradlew test
+
+publish application:
+  stage: "publish"
+  needs: [build application]
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.2-debug
+    entrypoint: [""]
+  tags:
+    - docker-privileged
+  rules:
+    - if: '$CI_COMMIT_TAG'
+  script:
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/build_and_publish_a_container_image_from_pipeline/Containerfile"
+      --destination "${CI_REGISTRY_IMAGE}:${CI_COMMIT_TAG}"
